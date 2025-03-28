@@ -1,4 +1,4 @@
-package com.pn.entity;
+package com.rural.platform.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,29 +1,73 @@
 package com.rural.platform.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import javax.persistence.*;
+import lombok.ToString;
+import java.util.Date;
 import java.time.LocalDateTime;
 
-@Entity
+/**
+ * user_info表的实体类:
+ */
 @Data
-@Table(name = "users")
+@ToString
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
 
-    @Column(unique = true, nullable = false, length = 50)
-    private String username;
+    private String phone;
 
-    @Column(unique = true, nullable = false, length = 100)
-    private String email;
+    private String address;
 
-    @Column(nullable = false)
-    private String password;
+    private LocalDateTime createdAt;
 
-    @Column(nullable = false, length = 20)
-    private String role = "USER";
+    private int userId;//用户id
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private String userCode;//账号
+
+    private String userName;//用户名
+
+    private String userPwd;//用户密码
+
+    private String userType;//用户类型
+
+    private String userState;//用户状态
+
+    private String isDelete;//删除状态
+
+    private String email; // 添加邮箱字段
+
+    private int createBy;//创建人id
+
+    //返回前端时,自动将Date转换成指定格式的json字符串
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private Date createTime;//创建时间
+
+    private int updateBy;//修改人id
+
+    private Date updateTime;//修改时间
+
+    private String creatorCode;//追加的属性--创建人
+
+    public User() {
+
+    }
+
+    public User(int userId, String userCode, String userName, String userPwd,
+                String userType, String userState, String isDelete, String email, String phone,
+                int createBy, Date createTime, int updateBy, Date updateTime) {
+        this.userId = userId;
+        this.userCode = userCode;
+        this.userName = userName;
+        this.userPwd = userPwd;
+        this.userType = userType;
+        this.userState = userState;
+        this.isDelete = isDelete;
+        this.email = email;
+        this.phone = phone;
+        this.createBy = createBy;
+        this.createTime = createTime;
+        this.updateBy = updateBy;
+        this.updateTime = updateTime;
+    }
 }

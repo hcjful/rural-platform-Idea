@@ -1,4 +1,4 @@
-package com.baidu.response;
+package com.rural.platform.response;
 
 import lombok.Data;
 

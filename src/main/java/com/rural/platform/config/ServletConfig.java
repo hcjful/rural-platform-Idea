@@ -1,6 +1,6 @@
-package com.pn.config;
+package com.rural.platform.config;
 
-import com.pn.filter.SecurityFilter;
+import com.rural.platform.filter.SecurityFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;

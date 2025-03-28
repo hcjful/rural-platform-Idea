@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rural.platform.mapper.LogisticsMapper">
+    
+    <select id="findById" resultType="com.rural.platform.entity.Logistics">
+        SELECT * FROM logistics WHERE id = #{id}
+    </select>
+    
+    <select id="findByOrderId" resultType="com.rural.platform.entity.Logistics">
+        SELECT * FROM logistics WHERE order_id = #{orderId}
+    </select>
+    
+    <insert id="insert" parameterType="com.rural.platform.entity.Logistics" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO logistics (order_id, tracking_no, carrier, status, current_location)
+        VALUES (#{orderId}, #{trackingNo}, #{carrier}, #{status}, #{currentLocation})
+    </insert>
+    
+    <update id="updateStatus" parameterType="com.rural.platform.entity.Logistics">
+        UPDATE logistics 
+        SET status = #{status},
+            current_location = #{currentLocation},
+            delivered_at = #{deliveredAt},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = #{id}
+    </update>
+</mapper> 

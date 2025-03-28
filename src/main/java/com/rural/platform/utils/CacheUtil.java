@@ -1,4 +1,4 @@
-package com.baidu.utils;
+package com.rural.platform.utils;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package com.pn.exception;
+package com.rural.platform.exception;
 
 /**
  * 用户操作不当导致的异常

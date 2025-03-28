@@ -1,5 +1,4 @@
-package com.pn.utils;
-
+package com.rural.platform.utils;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -11,13 +10,24 @@ import java.util.Arrays;
  */
 public class DigestUtil {
 
+    // 定义默认的字符编码
     private static String encodingCharset = "UTF-8";
 
-    //对参数数据进行MD5加密的算法
+    /**
+     * 对参数数据进行MD5加密的算法
+     * @param aValue 待加密的数据
+     * @return 加密后的数据
+     */
     public static String hmacSign(String aValue) {
         return hmacSign(aValue, "warehouse");
     }
 
+    /**
+     * 使用密钥对参数数据进行MD5加密的算法
+     * @param aValue 待加密的数据
+     * @param aKey 加密密钥
+     * @return 加密后的数据
+     */
     public static String hmacSign(String aValue, String aKey) {
         byte k_ipad[] = new byte[64];
         byte k_opad[] = new byte[64];
@@ -54,6 +64,11 @@ public class DigestUtil {
         return toHex(dg);
     }
 
+    /**
+     * 将字节数组转换为十六进制字符串
+     * @param input 字节数组
+     * @return 十六进制字符串
+     */
     public static String toHex(byte input[]) {
         if (input == null)
             return null;

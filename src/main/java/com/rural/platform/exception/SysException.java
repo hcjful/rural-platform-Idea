@@ -1,4 +1,4 @@
-package com.pn.exception;
+package com.rural.platform.exception;
 
 /**
  * 系统异常

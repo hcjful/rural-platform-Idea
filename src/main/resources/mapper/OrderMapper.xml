@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rural.platform.mapper.OrderMapper">
+    
+    <resultMap id="orderMap" type="com.rural.platform.entity.Order">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="totalAmount" column="total_amount"/>
+        <result property="status" column="status"/>
+        <result property="shippingAddress" column="shipping_address"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <collection property="orderDetails" javaType="java.util.List" ofType="com.rural.platform.entity.OrderDetail">
+            <id property="id" column="detail_id"/>
+            <result property="orderId" column="order_id"/>
+            <result property="productId" column="product_id"/>
+            <result property="quantity" column="quantity"/>
+            <result property="price" column="price"/>
+            <association property="product" javaType="com.rural.platform.entity.Product">
+                <id property="id" column="product_id"/>
+                <result property="name" column="product_name"/>
+                <result property="image" column="product_image"/>
+            </association>
+        </collection>
+    </resultMap>
+    
+    <select id="findById" resultMap="orderMap">
+        SELECT o.*, od.id as detail_id, od.product_id, od.quantity, od.price,
+               p.name as product_name, p.image as product_image
+        FROM `order` o
+        LEFT JOIN order_detail od ON o.id = od.order_id
+        LEFT JOIN product p ON od.product_id = p.id
+        WHERE o.id = #{id}
+    </select>
+    
+    <select id="findByUserId" resultMap="orderMap">
+        SELECT o.*, od.id as detail_id, od.product_id, od.quantity, od.price,
+               p.name as product_name, p.image as product_image
+        FROM `order` o
+        LEFT JOIN order_detail od ON o.id = od.order_id
+        LEFT JOIN product p ON od.product_id = p.id
+        WHERE o.user_id = #{userId}
+        ORDER BY o.created_at DESC
+    </select>
+    
+    <insert id="insert" parameterType="com.rural.platform.entity.Order" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `order` (user_id, total_amount, status, shipping_address)
+        VALUES (#{userId}, #{totalAmount}, #{status}, #{shippingAddress})
+    </insert>
+    
+    <update id="updateStatus">
+        UPDATE `order` SET status = #{status}, updated_at = CURRENT_TIMESTAMP
+        WHERE id = #{id}
+    </update>
+    
+    <delete id="deleteById">
+        DELETE FROM `order` WHERE id = #{id}
+    </delete>
+    
+    <select id="search" resultMap="orderMap">
+        SELECT o.*, od.id as detail_id, od.product_id, od.quantity, od.price,
+               p.name as product_name, p.image as product_image
+        FROM `order` o
+        LEFT JOIN order_detail od ON o.id = od.order_id
+        LEFT JOIN product p ON od.product_id = p.id
+        <where>
+            <if test="userId != null">
+                AND o.user_id = #{userId}
+            </if>
+            <if test="status != null and status != ''">
+                AND o.status = #{status}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                AND o.created_at >= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND o.created_at &lt;= #{endTime}
+            </if>
+        </where>
+        ORDER BY o.created_at DESC
+    </select>
+</mapper> 

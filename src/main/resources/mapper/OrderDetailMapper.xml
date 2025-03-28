@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rural.platform.mapper.OrderDetailMapper">
+    
+    <resultMap id="orderDetailMap" type="com.rural.platform.entity.OrderDetail">
+        <id property="id" column="id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="quantity" column="quantity"/>
+        <result property="price" column="price"/>
+        <association property="product" javaType="com.rural.platform.entity.Product">
+            <id property="id" column="product_id"/>
+            <result property="name" column="product_name"/>
+            <result property="image" column="product_image"/>
+        </association>
+    </resultMap>
+    
+    <select id="findByOrderId" resultMap="orderDetailMap">
+        SELECT od.*, p.name as product_name, p.image as product_image
+        FROM order_detail od
+        LEFT JOIN product p ON od.product_id = p.id
+        WHERE od.order_id = #{orderId}
+    </select>
+    
+    <insert id="insert" parameterType="com.rural.platform.entity.OrderDetail" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO order_detail (order_id, product_id, quantity, price)
+        VALUES (#{orderId}, #{productId}, #{quantity}, #{price})
+    </insert>
+    
+    <delete id="deleteByOrderId">
+        DELETE FROM order_detail WHERE order_id = #{orderId}
+    </delete>
+</mapper> 

@@ -1,4 +1,4 @@
-package com.rural.ruralplatform;
+package com.rural.platform;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;

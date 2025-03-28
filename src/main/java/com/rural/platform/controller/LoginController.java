@@ -1,35 +1,29 @@
 package com.rural.platform.controller;
-
-import com.rural.platform.dto.LoginRequest;
-import com.rural.platform.dto.LoginResponse;
-import com.rural.platform.dto.RegisterRequest;
-import com.rural.platform.entity.User;
+import com.rural.platform.response.Response;
 import com.rural.platform.service.UserService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import com.rural.platform.vo.UserInfoVo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
+
 @RestController
-@RequestMapping("/api/auth")
-@RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:8081") // 允许前端访问
-public class AuthController {
-    private final UserService userService;
+@CrossOrigin
+public class LoginController {
+    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    private UserService userService;
+
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        String token = userService.login(request.getUsername(), request.getPassword());
-        return ResponseEntity.ok(new LoginResponse(token, request.getUsername()));
-    }
-
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-        User user = new User();
-        user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
-
-        userService.register(user);
-        return ResponseEntity.ok().body("注册成功");
+    public Response<String> login(@RequestBody UserInfoVo userInfoVo, HttpServletRequest request){
+        return  userService.login(userInfoVo);
     }
 }

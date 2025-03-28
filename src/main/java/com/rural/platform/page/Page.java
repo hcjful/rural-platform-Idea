@@ -1,4 +1,4 @@
-package com.pn.page;
+package com.rural.platform.page;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

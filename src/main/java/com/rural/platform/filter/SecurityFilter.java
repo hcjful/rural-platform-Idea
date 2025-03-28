@@ -1,10 +1,11 @@
-package com.pn.filter;
+package com.rural.platform.filter;
 
 import com.alibaba.fastjson.JSON;
-import com.pn.entity.Result;
-import com.pn.utils.WarehouseConstants;
+import com.rural.platform.entity.Result;
+import com.rural.platform.utils.WarehouseConstants;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.util.StringUtils;
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,22 +34,39 @@ public class SecurityFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
             throws IOException, ServletException {
 
-        HttpServletRequest request = (HttpServletRequest)req;
-        HttpServletResponse response = (HttpServletResponse)resp;
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) resp;
 
         //获取请求url接口
         String path = request.getServletPath();
-        /*
-          白名单请求都直接放行:
-         */
-        List<String> urlList = new ArrayList<>();
-        urlList.add("/captcha/captchaImage");
-        urlList.add("/login");
-        urlList.add("/logout");
-        //对上传图片的url接口/product/img-upload的请求直接放行
-        urlList.add("/product/img-upload");
-        //对static下的/img/upload中的静态资源图片的访问直接放行
-        if(urlList.contains(path)||path.contains("/img/upload")){
+
+        // 白名单路径前缀
+        List<String> prefixList = new ArrayList<>();
+        prefixList.add("/captcha/captchaImage");
+        prefixList.add("/login");
+        prefixList.add("/logout");
+        prefixList.add("/auth/register");
+        prefixList.add("/auth/check-usercode");
+        prefixList.add("/auth/check-email");
+        prefixList.add("/auth/check-phone");
+        prefixList.add("/cultural-activities");
+        prefixList.add("/api/cultural-activities");
+        prefixList.add("/product/img-upload");
+        prefixList.add("/img/upload");
+        prefixList.add("/orders");
+        prefixList.add("/products");
+        prefixList.add("/cart");
+
+        // 检查路径是否在白名单中
+        boolean isWhitelisted = false;
+        for (String prefix : prefixList) {
+            if (path.startsWith(prefix)) {
+                isWhitelisted = true;
+                break;
+            }
+        }
+
+        if (isWhitelisted) {
             chain.doFilter(request, response);
             return;
         }
@@ -59,7 +77,7 @@ public class SecurityFilter implements Filter {
         //拿到前端归还的token
         String clientToken = request.getHeader(WarehouseConstants.HEADER_TOKEN_NAME);
         //校验token,校验通过请求放行
-        if(StringUtils.hasText(clientToken)&&redisTemplate.hasKey(clientToken)){
+        if (StringUtils.hasText(clientToken) && redisTemplate.hasKey(clientToken)) {
             chain.doFilter(request, response);
             return;
         }
@@ -72,5 +90,4 @@ public class SecurityFilter implements Filter {
         out.flush();
         out.close();
     }
-
 }

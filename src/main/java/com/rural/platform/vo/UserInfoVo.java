@@ -1,4 +1,4 @@
-package vo;
+package com.rural.platform.vo;
 
 import lombok.Data;
 

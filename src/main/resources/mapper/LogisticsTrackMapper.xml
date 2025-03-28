@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rural.platform.mapper.LogisticsTrackMapper">
+    
+    <select id="findByLogisticsId" resultType="com.rural.platform.entity.LogisticsTrack">
+        SELECT * FROM logistics_track 
+        WHERE logistics_id = #{logisticsId} 
+        ORDER BY track_time DESC
+    </select>
+    
+    <insert id="insert" parameterType="com.rural.platform.entity.LogisticsTrack" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO logistics_track (logistics_id, location, description, track_time)
+        VALUES (#{logisticsId}, #{location}, #{description}, #{trackTime})
+    </insert>
+</mapper> 

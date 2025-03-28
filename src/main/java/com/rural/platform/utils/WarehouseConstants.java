@@ -1,4 +1,4 @@
-package com.pn.utils;
+package com.rural.platform.utils;
 
 /**
  * 常量类:
