@@ -56,6 +56,9 @@ public class SecurityFilter implements Filter {
         prefixList.add("/orders");
         prefixList.add("/products");
         prefixList.add("/cart");
+        prefixList.add("/volunteer-activities");
+        prefixList.add("/weather");
+
 
         // 检查路径是否在白名单中
         boolean isWhitelisted = false;

@@ -8,11 +8,11 @@ import java.time.LocalDateTime;
 public class Product {
     private Long id;
     private String name;
-    private String category;
     private BigDecimal price;
-    private String origin;
-    private String description;
     private String image;
+    private String description;
+    private String category;
+    private String origin;
     private Integer stock;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

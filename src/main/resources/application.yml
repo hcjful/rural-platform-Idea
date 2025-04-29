@@ -1,0 +1,14 @@
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true  # 开启字段下划线映射
+  global-config:
+    db-config:
+      table-underline: true             # 表名下划线格式
+      # 如果有表前缀可配置
+      # table-prefix: t_
+
+weather:
+  api:
+    key: 68db13a6d081478eb6615c91a3074c0e  # 替换为你的和风天气 API key
+    version: "7"
+    base-url: "https://api.qweather.com"

@@ -4,7 +4,7 @@
 
     <!-- 增加浏览次数 -->
     <update id="incrementViewCount">
-        UPDATE cultural_activity
+        UPDATE cultural_activities
         SET view_count = view_count + 1
         WHERE id = #{id}
     </update>

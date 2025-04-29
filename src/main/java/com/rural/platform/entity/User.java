@@ -3,60 +3,38 @@ package com.rural.platform.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.ToString;
-import java.util.Date;
 import java.time.LocalDateTime;
 
 /**
- * user_info表的实体类:
+ * user_info表的实体类
  */
 @Data
 @ToString
 public class User {
-
     private Long id;
-
-    private String phone;
-
-    private String address;
-
-    private LocalDateTime createdAt;
-
-    private int userId;//用户id
-
-    private String userCode;//账号
-
-    private String userName;//用户名
-
-    private String userPwd;//用户密码
-
-    private String userType;//用户类型
-
-    private String userState;//用户状态
-
-    private String isDelete;//删除状态
-
-    private String email; // 添加邮箱字段
-
-    private int createBy;//创建人id
-
-    //返回前端时,自动将Date转换成指定格式的json字符串
+    private String userName;    // 用户名
+    private String nickName;    // 昵称
+    private String userCode;    // 账号
+    private String userPwd;     // 用户密码
+    private String phone;       // 手机号
+    private String email;       // 邮箱
+    private String address;     // 地址
+    private String userType;    // 用户类型
+    private String userState;   // 用户状态
+    private String isDelete;    // 删除状态
+    private Integer createBy;   // 创建人id
+    private Integer updateBy;   // 修改人id
+    private String creatorCode; // 创建人编码
+    
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private Date createTime;//创建时间
+    private LocalDateTime createTime; // 创建时间
+    private LocalDateTime updateTime; // 修改时间
 
-    private int updateBy;//修改人id
+    public User() {}
 
-    private Date updateTime;//修改时间
-
-    private String creatorCode;//追加的属性--创建人
-
-    public User() {
-
-    }
-
-    public User(int userId, String userCode, String userName, String userPwd,
+    public User(String userCode, String userName, String userPwd,
                 String userType, String userState, String isDelete, String email, String phone,
-                int createBy, Date createTime, int updateBy, Date updateTime) {
-        this.userId = userId;
+                Integer createBy, LocalDateTime createTime, Integer updateBy, LocalDateTime updateTime) {
         this.userCode = userCode;
         this.userName = userName;
         this.userPwd = userPwd;

@@ -5,11 +5,11 @@
     <select id="findByLogisticsId" resultType="com.rural.platform.entity.LogisticsTrack">
         SELECT * FROM logistics_track 
         WHERE logistics_id = #{logisticsId} 
-        ORDER BY track_time DESC
+        ORDER BY created_at DESC
     </select>
     
     <insert id="insert" parameterType="com.rural.platform.entity.LogisticsTrack" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO logistics_track (logistics_id, location, description, track_time)
-        VALUES (#{logisticsId}, #{location}, #{description}, #{trackTime})
+        INSERT INTO logistics_track (logistics_id, location, status)
+        VALUES (#{logisticsId}, #{location}, #{status})
     </insert>
 </mapper> 

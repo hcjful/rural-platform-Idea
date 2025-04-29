@@ -8,14 +8,13 @@
         <result property="roleId" column="role_id"/>
         <association property="role" javaType="com.rural.platform.entity.Role">
             <id property="id" column="role_id"/>
-            <result property="name" column="role_name"/>
-            <result property="code" column="role_code"/>
-            <result property="description" column="role_description"/>
+            <result property="roleName" column="role_name"/>
+            <result property="roleCode" column="role_code"/>
+            <result property="description" column="description"/>
         </association>
         <association property="user" javaType="com.rural.platform.entity.User">
             <id property="id" column="user_id"/>
-            <result property="username" column="username"/>
-            <result property="nickname" column="nickname"/>
+            <result property="userName" column="user_name"/>
         </association>
     </resultMap>
     
@@ -37,8 +36,8 @@
     </delete>
     
     <select id="findByUserId" resultMap="userRoleMap">
-        SELECT ur.*, r.name as role_name, r.code as role_code, r.description as role_description,
-               u.username, u.nickname
+        SELECT ur.*, r.role_name, r.role_code, r.description,
+               u.user_name
         FROM user_role ur
         LEFT JOIN role r ON ur.role_id = r.id
         LEFT JOIN user u ON ur.user_id = u.id
@@ -46,8 +45,8 @@
     </select>
     
     <select id="findByRoleId" resultMap="userRoleMap">
-        SELECT ur.*, r.name as role_name, r.code as role_code, r.description as role_description,
-               u.username, u.nickname
+        SELECT ur.*, r.role_name, r.role_code, r.description,
+               u.user_name
         FROM user_role ur
         LEFT JOIN role r ON ur.role_id = r.id
         LEFT JOIN user u ON ur.user_id = u.id
@@ -55,8 +54,8 @@
     </select>
     
     <select id="findByUserAndRole" resultMap="userRoleMap">
-        SELECT ur.*, r.name as role_name, r.code as role_code, r.description as role_description,
-               u.username, u.nickname
+        SELECT ur.*, r.role_name, r.role_code, r.description,
+               u.user_name
         FROM user_role ur
         LEFT JOIN role r ON ur.role_id = r.id
         LEFT JOIN user u ON ur.user_id = u.id

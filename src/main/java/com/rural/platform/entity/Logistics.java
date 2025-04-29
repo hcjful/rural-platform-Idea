@@ -1,18 +1,78 @@
 package com.rural.platform.entity;
 
-import lombok.Data;
 import java.time.LocalDateTime;
 
-@Data
 public class Logistics {
     private Long id;
     private Long orderId;
+    private String carrier;
     private String trackingNo;
-    private String carrier; // 快递公司
-    private String status; // PENDING, SHIPPING, DELIVERED
+    private String status;
     private String currentLocation;
-    private LocalDateTime estimatedDeliveryTime;
     private LocalDateTime deliveredAt;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private LocalDateTime createTime;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
+
+    public String getCarrier() {
+        return carrier;
+    }
+
+    public void setCarrier(String carrier) {
+        this.carrier = carrier;
+    }
+
+    public String getTrackingNo() {
+        return trackingNo;
+    }
+
+    public void setTrackingNo(String trackingNo) {
+        this.trackingNo = trackingNo;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getCurrentLocation() {
+        return currentLocation;
+    }
+
+    public void setCurrentLocation(String currentLocation) {
+        this.currentLocation = currentLocation;
+    }
+
+    public LocalDateTime getDeliveredAt() {
+        return deliveredAt;
+    }
+
+    public void setDeliveredAt(LocalDateTime deliveredAt) {
+        this.deliveredAt = deliveredAt;
+    }
+
+    public LocalDateTime getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
+    }
 } 

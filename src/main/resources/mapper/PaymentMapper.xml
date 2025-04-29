@@ -6,21 +6,19 @@
         SELECT * FROM payment WHERE order_id = #{orderId}
     </select>
     
-    <select id="findByPaymentNo" resultType="com.rural.platform.entity.Payment">
-        SELECT * FROM payment WHERE payment_no = #{paymentNo}
+    <select id="findByPaymentType" resultType="com.rural.platform.entity.Payment">
+        SELECT * FROM payment WHERE payment_type = #{paymentType}
     </select>
     
     <insert id="insert" parameterType="com.rural.platform.entity.Payment" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO payment (order_id, payment_no, amount, payment_method, status)
-        VALUES (#{orderId}, #{paymentNo}, #{amount}, #{paymentMethod}, #{status})
+        INSERT INTO payment (order_id, payment_type, amount, status)
+        VALUES (#{orderId}, #{paymentType}, #{amount}, #{status})
     </insert>
     
     <update id="updateStatus" parameterType="com.rural.platform.entity.Payment">
         UPDATE payment 
         SET status = #{status},
-            transaction_id = #{transactionId},
-            paid_at = #{paidAt},
-            updated_at = CURRENT_TIMESTAMP
+            transaction_id = #{transactionId}
         WHERE id = #{id}
     </update>
 </mapper> 

@@ -3,8 +3,8 @@
 <mapper namespace="com.rural.platform.mapper.ReviewMapper">
     
     <insert id="insert" parameterType="com.rural.platform.entity.Review" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO review (product_id, user_id, order_id, rating, content, images, is_anonymous)
-        VALUES (#{productId}, #{userId}, #{orderId}, #{rating}, #{content}, #{images}, #{isAnonymous})
+        INSERT INTO review (product_id, user_id, order_id, rating, content)
+        VALUES (#{productId}, #{userId}, #{orderId}, #{rating}, #{content})
     </insert>
     
     <select id="findByProductId" resultType="com.rural.platform.entity.Review">

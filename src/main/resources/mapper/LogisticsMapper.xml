@@ -11,16 +11,13 @@
     </select>
     
     <insert id="insert" parameterType="com.rural.platform.entity.Logistics" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO logistics (order_id, tracking_no, carrier, status, current_location)
-        VALUES (#{orderId}, #{trackingNo}, #{carrier}, #{status}, #{currentLocation})
+        INSERT INTO logistics (order_id, tracking_number, carrier, status)
+        VALUES (#{orderId}, #{trackingNumber}, #{carrier}, #{status})
     </insert>
     
     <update id="updateStatus" parameterType="com.rural.platform.entity.Logistics">
         UPDATE logistics 
-        SET status = #{status},
-            current_location = #{currentLocation},
-            delivered_at = #{deliveredAt},
-            updated_at = CURRENT_TIMESTAMP
+        SET status = #{status}
         WHERE id = #{id}
     </update>
 </mapper> 

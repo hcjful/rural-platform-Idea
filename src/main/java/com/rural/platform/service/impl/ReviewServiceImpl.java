@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.lang.reflect.Field;
 
 @Service
 class ReviewServiceImpl implements ReviewService {
@@ -32,7 +33,15 @@ class ReviewServiceImpl implements ReviewService {
                         }
                     })
                     .collect(Collectors.toList());
-            review.setImages(String.join(",", imageUrls));
+            
+            // 使用反射设置images字段
+            try {
+                Field imagesField = Review.class.getDeclaredField("images");
+                imagesField.setAccessible(true);
+                imagesField.set(review, String.join(",", imageUrls));
+            } catch (Exception e) {
+                throw new RuntimeException("设置评价图片失败", e);
+            }
         }
 
         reviewMapper.insert(review);

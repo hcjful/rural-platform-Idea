@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import com.rural.platform.dto.RegisterRequest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -43,7 +45,7 @@ public class UserServiceImpl implements UserService {
         user.setUserType("NORMAL");
         user.setUserState("ACTIVE");
         user.setIsDelete("0");
-        user.setCreateTime(new Date());
+        user.setCreateTime(LocalDateTime.now());
         // 设置 email 和 phone 字段
         user.setEmail(request.getEmail()); // 设置 email
         user.setPhone(request.getPhone()); // 设置 phone

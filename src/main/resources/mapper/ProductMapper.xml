@@ -11,6 +11,8 @@
         <result property="description" column="description"/>
         <result property="image" column="image"/>
         <result property="stock" column="stock"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
     </resultMap>
     
     <select id="findById" resultMap="productMap">

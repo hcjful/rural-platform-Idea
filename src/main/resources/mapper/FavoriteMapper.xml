@@ -18,8 +18,8 @@
         </association>
         <association property="user" javaType="com.rural.platform.entity.User">
             <id property="id" column="user_id"/>
-            <result property="username" column="username"/>
-            <result property="nickname" column="nickname"/>
+            <result property="userName" column="user_name"/>
+            <result property="userCode" column="user_code"/>
         </association>
     </resultMap>
     
@@ -28,7 +28,7 @@
                p.name as product_name, p.price as product_price, 
                p.image as product_image, p.description as product_description,
                p.category as product_category, p.origin as product_origin,
-               u.username, u.nickname
+               u.user_name, u.user_code
         FROM favorite f
         LEFT JOIN product p ON f.product_id = p.id
         LEFT JOIN user u ON f.user_id = u.id
@@ -41,7 +41,7 @@
                p.name as product_name, p.price as product_price, 
                p.image as product_image, p.description as product_description,
                p.category as product_category, p.origin as product_origin,
-               u.username, u.nickname
+               u.user_name, u.user_code
         FROM favorite f
         LEFT JOIN product p ON f.product_id = p.id
         LEFT JOIN user u ON f.user_id = u.id
@@ -53,7 +53,7 @@
                p.name as product_name, p.price as product_price, 
                p.image as product_image, p.description as product_description,
                p.category as product_category, p.origin as product_origin,
-               u.username, u.nickname
+               u.user_name, u.user_code
         FROM favorite f
         LEFT JOIN product p ON f.product_id = p.id
         LEFT JOIN user u ON f.user_id = u.id

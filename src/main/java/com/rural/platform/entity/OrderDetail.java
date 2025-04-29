@@ -10,4 +10,8 @@ public class OrderDetail {
     private Long productId;
     private Integer quantity;
     private BigDecimal price;
-} 
+    private OrderProductInfo product;  // 关联的商品信息
+
+    private Product name;
+    private Product image;
+}

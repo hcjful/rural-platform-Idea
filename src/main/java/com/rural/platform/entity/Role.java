@@ -6,9 +6,8 @@ import java.time.LocalDateTime;
 @Data
 public class Role {
     private Long id;
-    private String name;
-    private String code;
-    private String description;
+    private String roleName;  // 角色名称
+    private String roleCode;  // 角色编码
+    private String description;  // 角色描述
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-} 
+}

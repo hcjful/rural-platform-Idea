@@ -9,4 +9,8 @@ public class Favorite {
     private Long userId;
     private Long productId;
     private LocalDateTime createdAt;
+    
+    // 关联对象
+    private Product product;
+    private User user;
 } 
