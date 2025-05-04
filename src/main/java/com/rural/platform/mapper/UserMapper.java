@@ -1,13 +1,12 @@
 package com.rural.platform.mapper;
 
-import cn.hutool.system.UserInfo;
 import com.rural.platform.entity.User;
 import com.rural.platform.page.Page;
+import com.rural.platform.vo.UserVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import java.util.Map;
 
 @Mapper
 public interface UserMapper {
@@ -58,4 +57,11 @@ public interface UserMapper {
     List<User> search(@Param("username") String username, 
                      @Param("phone") String phone, 
                      @Param("roleCode") String roleCode);
+
+    User selectById(Long id);
+    UserVO selectUserInfo(Long userId);
+    int updateById(User user);
+    int updateAvatar(@Param("userId") Long userId, @Param("avatar") String avatar);
+    int updatePhone(@Param("userId") Long userId, @Param("phone") String phone);
+    int updateEmail(@Param("userId") Long userId, @Param("email") String email);
 }

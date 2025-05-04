@@ -1,7 +1,6 @@
 package com.rural.platform.service.impl;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rural.platform.config.WeatherApiConfig;
 import com.rural.platform.service.WeatherApiService;
 import com.rural.platform.vo.WeatherVO;
@@ -23,7 +22,7 @@ public class WeatherApiServiceImpl implements WeatherApiService {
 
     private final WeatherApiConfig config;
     private final RestTemplate restTemplate;
-    private final ObjectMapper objectMapper;
+
     
     @Value("${weather.api.key}")
     private String apiKey;

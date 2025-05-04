@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rural.platform.mapper.WarningRecordMapper">
+    
+    <!-- 基础结果映射 -->
+    <resultMap id="BaseResultMap" type="com.rural.platform.entity.WarningRecord">
+        <id column="id" property="id"/>
+        <result column="warning_id" property="warningId"/>
+        <result column="action" property="action"/>
+        <result column="operator" property="operator"/>
+        <result column="operation_time" property="operationTime"/>
+        <result column="create_by" property="createBy"/>
+        <result column="create_date" property="createDate"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="update_date" property="updateDate"/>
+        <result column="remarks" property="remarks"/>
+        <result column="del_flag" property="delFlag"/>
+    </resultMap>
+
+    <!-- 根据预警ID获取处理记录 -->
+    <select id="getRecordsByWarningId" resultMap="BaseResultMap">
+        SELECT *
+        FROM warning_record
+        WHERE warning_id = #{warningId}
+        AND del_flag = '0'
+        ORDER BY operation_time DESC
+    </select>
+</mapper>

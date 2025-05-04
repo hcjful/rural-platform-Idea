@@ -25,12 +25,6 @@ public class Page {
     //总行数
     private Integer totalNum;
 
-    //总页数
-    private Integer pageCount;
-
-    //limit函数参数一每页起始行
-    private Integer limitIndex;
-
     //存储当前页查询到的数据的List<?>集合
     private List<?> resultList;
 

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rural.platform.mapper.UserNotificationSettingsMapper">
+    <select id="selectByUserId" resultType="com.rural.platform.entity.UserNotificationSettings">
+        SELECT * FROM user_notification_settings WHERE user_id = #{userId}
+    </select>
+    
+    <update id="updateByUserId">
+        UPDATE user_notification_settings
+        SET system_notify = #{systemNotify},
+            activity_notify = #{activityNotify},
+            comment_notify = #{commentNotify},
+            message_notify = #{messageNotify},
+            notify_methods = #{notifyMethods},
+            updated_at = NOW()
+        WHERE user_id = #{userId}
+    </update>
+    
+    <insert id="insert">
+        INSERT INTO user_notification_settings (
+            user_id, system_notify, activity_notify, comment_notify, 
+            message_notify, notify_methods, created_at, updated_at
+        ) VALUES (
+            #{userId}, #{systemNotify}, #{activityNotify}, #{commentNotify},
+            #{messageNotify}, #{notifyMethods}, NOW(), NOW()
+        )
+    </insert>
+</mapper>

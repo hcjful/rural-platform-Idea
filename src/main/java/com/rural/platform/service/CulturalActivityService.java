@@ -2,7 +2,6 @@ package com.rural.platform.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.rural.platform.dto.CulturalActivityDTO;
-import com.rural.platform.entity.CulturalActivity;
 
 public interface CulturalActivityService {
     IPage<CulturalActivityDTO> getActivityPage(Integer page, Integer pageSize, String category, String searchKey);

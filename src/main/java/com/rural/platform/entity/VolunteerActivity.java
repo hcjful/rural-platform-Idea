@@ -34,14 +34,6 @@ public class VolunteerActivity {
     @Column(nullable = false)
     private String location;
 
-    @Column(name = "start_date", nullable = false)
-    @TableField("start_date")
-    private LocalDateTime startDate;
-
-    @Column(name = "end_date", nullable = false)
-    @TableField("end_date")
-    private LocalDateTime endDate;
-
     @Column(name = "max_volunteers", nullable = false)
     @TableField("max_volunteers")
     private Integer maxVolunteers;

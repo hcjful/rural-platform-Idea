@@ -1,7 +1,6 @@
 package com.rural.platform.service;
 
 import com.rural.platform.entity.User;
-import com.rural.platform.page.Page;
 import com.rural.platform.response.Response; // 修改为正确的Response包路径
 import com.rural.platform.vo.UserInfoVo;
 import com.rural.platform.dto.RegisterRequest;

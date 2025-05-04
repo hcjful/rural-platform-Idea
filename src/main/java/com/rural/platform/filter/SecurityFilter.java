@@ -58,6 +58,18 @@ public class SecurityFilter implements Filter {
         prefixList.add("/cart");
         prefixList.add("/volunteer-activities");
         prefixList.add("/weather");
+        prefixList.add("/notifications");
+        prefixList.add("/talents");
+        prefixList.add("/comments");
+        prefixList.add("/warning");
+        prefixList.add("/warning/statistics");
+        prefixList.add("/warning/list");
+        prefixList.add("/warning/status");  
+        prefixList.add("/user");
+
+
+
+
 
 
         // 检查路径是否在白名单中

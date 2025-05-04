@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.stream.Collectors;
 
 @Service
 public class CulturalActivityServiceImpl implements CulturalActivityService {

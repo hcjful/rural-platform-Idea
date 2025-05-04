@@ -1,7 +1,6 @@
 package com.rural.platform.service.impl;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rural.platform.config.WeatherApiConfig;
 import com.rural.platform.response.WeatherResponse;
 import com.rural.platform.service.WeatherService;
@@ -24,7 +23,6 @@ public class WeatherServiceImpl implements WeatherService {
     
     private final WeatherApiConfig config;
     private final RestTemplate restTemplate;
-    private final ObjectMapper objectMapper;
 
     @Override
     public WeatherResponse getWeather(String city) {

@@ -3,7 +3,7 @@ package com.rural.platform.service.impl;
 import com.rural.platform.entity.Review;
 import com.rural.platform.mapper.ReviewMapper;
 import com.rural.platform.service.ReviewService;
-import com.rural.platform.utils.FileUploadUtil;
+import com.rural.platform.utils.FileUploadUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +27,7 @@ class ReviewServiceImpl implements ReviewService {
             List<String> imageUrls = images.stream()
                     .map(file -> {
                         try {
-                            return FileUploadUtil.uploadFile(file, "reviews");
+                            return FileUploadUtils.upload(file, "reviews");
                         } catch (IOException e) {
                             throw new RuntimeException("上传评价图片失败", e);
                         }

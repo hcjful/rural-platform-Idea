@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rural.platform.mapper.CommentMapper">
+    
+    <resultMap id="CommentResult" type="com.rural.platform.entity.Comment">
+        <id property="id" column="id"/>
+        <result property="talentId" column="talent_id"/>
+        <result property="content" column="content"/>
+        <result property="userName" column="user_name"/>
+        <result property="userAvatar" column="user_avatar"/>
+        <result property="likes" column="likes"/>
+        <result property="isLiked" column="is_liked"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <select id="selectCommentsByTalentId" resultMap="CommentResult">
+        SELECT 
+            id, talent_id, content, user_name,
+            user_avatar, likes, is_liked, create_time
+        FROM comments
+        WHERE talent_id = #{talentId}
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="selectCommentById" resultMap="CommentResult">
+        SELECT 
+            id, talent_id, content, user_name,
+            user_avatar, likes, is_liked, create_time
+        FROM comments
+        WHERE id = #{id}
+    </select>
+
+    <insert id="insertComment" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO comments (
+            talent_id, content, user_name, user_avatar,
+            likes, is_liked, create_time
+        ) VALUES (
+            #{talentId}, #{content}, #{userName}, #{userAvatar},
+            0, false, #{createTime}
+        )
+    </insert>
+
+    <update id="updateComment">
+        UPDATE comments
+        <set>
+            <if test="likes != null">likes = #{likes},</if>
+            <if test="isLiked != null">is_liked = #{isLiked},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+</mapper> 

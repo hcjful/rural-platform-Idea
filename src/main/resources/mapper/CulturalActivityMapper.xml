@@ -9,4 +9,58 @@
         WHERE id = #{id}
     </update>
 
+    <!-- 查询用户发布的文化活动 -->
+    <select id="selectPublishedByUserId" resultType="java.util.Map">
+        SELECT 
+            a.id,
+            a.title,
+            a.description,
+            a.start_time as startTime,
+            a.end_time as endTime,
+            a.location,
+            a.status,
+            a.participant_count as participantCount,
+            a.created_at as createdAt
+        FROM cultural_activities a
+        WHERE a.user_id = #{userId}
+        ORDER BY a.created_at DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+    
+    <!-- 统计用户发布的文化活动数量 -->
+    <select id="countPublishedByUserId" resultType="int">
+        SELECT COUNT(*)
+        FROM cultural_activities
+        WHERE user_id = #{userId}
+    </select>
+    
+    <!-- 查询用户参与的文化活动 -->
+    <select id="selectParticipatedByUserId" resultType="java.util.Map">
+        SELECT 
+            a.id,
+            a.title,
+            a.description,
+            a.start_time as startTime,
+            a.end_time as endTime,
+            a.location,
+            a.status,
+            a.participant_count as participantCount,
+            a.created_at as createdAt,
+            u.user_name as publisherName
+        FROM cultural_activities a
+        INNER JOIN cultural_participants p ON a.id = p.activity_id
+        INNER JOIN users u ON a.user_id = u.id
+        WHERE p.user_id = #{userId}
+        ORDER BY a.start_time DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+    
+    <!-- 统计用户参与的文化活动数量 -->
+    <select id="countParticipatedByUserId" resultType="int">
+        SELECT COUNT(*)
+        FROM cultural_activities a
+        INNER JOIN cultural_participants p ON a.id = p.activity_id
+        WHERE p.user_id = #{userId}
+    </select>
+
 </mapper> 

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rural.platform.mapper.WarningInfoMapper">
+    
+    <!-- 基础结果映射 -->
+    <resultMap id="BaseResultMap" type="com.rural.platform.entity.WarningInfo">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="type" property="type"/>
+        <result column="status" property="status"/>
+        <result column="description" property="description"/>
+        <result column="content" property="content"/>
+        <result column="create_time" property="createTime"/>
+        <result column="publisher" property="publisher"/>
+        <result column="area" property="area"/>
+        <result column="urgency" property="urgency"/>
+        <result column="create_by" property="createBy"/>
+        <result column="create_date" property="createDate"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="update_date" property="updateDate"/>
+        <result column="remarks" property="remarks"/>
+        <result column="del_flag" property="delFlag"/>
+    </resultMap>
+
+    <!-- 带处理记录的结果映射 -->
+    <resultMap id="WarningInfoWithRecordsMap" type="com.rural.platform.entity.WarningInfo" extends="BaseResultMap">
+        <collection property="records" ofType="com.rural.platform.entity.WarningRecord">
+            <id column="record_id" property="id"/>
+            <result column="warning_id" property="warningId"/>
+            <result column="action" property="action"/>
+            <result column="operator" property="operator"/>
+            <result column="operation_time" property="operationTime"/>
+            <result column="record_create_by" property="createBy"/>
+            <result column="record_create_date" property="createDate"/>
+            <result column="record_update_by" property="updateBy"/>
+            <result column="record_update_date" property="updateDate"/>
+            <result column="record_remarks" property="remarks"/>
+            <result column="record_del_flag" property="delFlag"/>
+        </collection>
+    </resultMap>
+
+    <!-- 统计各状态的预警数量 -->
+    <select id="countByStatus" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM warning_info
+        WHERE status = #{status}
+        AND del_flag = '0'
+    </select>
+
+    <!-- 获取预警信息列表（带处理记录） -->
+    <select id="getWarningInfoWithRecords" resultMap="WarningInfoWithRecordsMap">
+        SELECT 
+            w.*,
+            r.id as record_id,
+            r.warning_id,
+            r.action,
+            r.operator,
+            r.operation_time,
+            r.create_by as record_create_by,
+            r.create_date as record_create_date,
+            r.update_by as record_update_by,
+            r.update_date as record_update_date,
+            r.remarks as record_remarks,
+            r.del_flag as record_del_flag
+        FROM warning_info w
+        LEFT JOIN warning_record r ON w.id = r.warning_id
+        WHERE w.del_flag = '0'
+        <if test="keyword != null and keyword != ''">
+            AND (w.title LIKE CONCAT('%', #{keyword}, '%')
+            OR w.description LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+        <if test="type != null and type != ''">
+            AND w.type = #{type}
+        </if>
+        <if test="status != null and status != ''">
+            AND w.status = #{status}
+        </if>
+        ORDER BY w.create_time DESC
+    </select>
+</mapper>

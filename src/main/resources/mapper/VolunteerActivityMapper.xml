@@ -25,7 +25,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, title, description, category, image_url, location, start_date, end_date,
+        id, title, description, category, image_url, location,
         max_volunteers, current_volunteers, duration, content, review_content, review_images,
         status, created_at, updated_at
     </sql>
@@ -50,6 +50,60 @@
             </if>
         </where>
         ORDER BY created_at DESC
+    </select>
+
+    <!-- 查询用户发布的志愿活动 -->
+    <select id="selectPublishedByUserId" resultType="java.util.Map">
+        SELECT 
+            a.id,
+            a.title,
+            a.description,
+            a.start_time as startTime,
+            a.end_time as endTime,
+            a.location,
+            a.status,
+            a.participant_count as participantCount,
+            a.created_at as createdAt
+        FROM volunteer_activities a
+        WHERE a.user_id = #{userId}
+        ORDER BY a.created_at DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+    
+    <!-- 统计用户发布的志愿活动数量 -->
+    <select id="countPublishedByUserId" resultType="int">
+        SELECT COUNT(*)
+        FROM volunteer_activities
+        WHERE user_id = #{userId}
+    </select>
+    
+    <!-- 查询用户参与的志愿活动 -->
+    <select id="selectParticipatedByUserId" resultType="java.util.Map">
+        SELECT 
+            a.id,
+            a.title,
+            a.description,
+            a.start_time as startTime,
+            a.end_time as endTime,
+            a.location,
+            a.status,
+            a.participant_count as participantCount,
+            a.created_at as createdAt,
+            u.user_name as publisherName
+        FROM volunteer_activities a
+        INNER JOIN volunteer_participants p ON a.id = p.activity_id
+        INNER JOIN users u ON a.user_id = u.id
+        WHERE p.user_id = #{userId}
+        ORDER BY a.start_time DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+    
+    <!-- 统计用户参与的志愿活动数量 -->
+    <select id="countParticipatedByUserId" resultType="int">
+        SELECT COUNT(*)
+        FROM volunteer_activities a
+        INNER JOIN volunteer_participants p ON a.id = p.activity_id
+        WHERE p.user_id = #{userId}
     </select>
 
 </mapper> 
