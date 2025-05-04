@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rural.platform.mapper.VolunteerSignupMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.rural.platform.entity.VolunteerSignup">
+        <id column="id" property="id"/>
+        <result column="activity_id" property="activity.id"/>
+        <result column="name" property="name"/>
+        <result column="phone" property="phone"/>
+        <result column="id_card" property="idCard"/>
+        <result column="reason" property="reason"/>
+        <result column="status" property="status"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, activity_id, name, phone, id_card, reason, status, created_at, updated_at
+    </sql>
+
+    <!-- 根据活动ID查询报名信息 -->
+    <select id="findByActivityId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM volunteer_signups
+        WHERE activity_id = #{activityId}
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 根据活动ID和状态统计报名人数 -->
+    <select id="countByActivityIdAndStatus" resultType="int">
+        SELECT COUNT(*)
+        FROM volunteer_signups
+        WHERE activity_id = #{activityId}
+        AND status = #{status}
+    </select>
+
+</mapper> 

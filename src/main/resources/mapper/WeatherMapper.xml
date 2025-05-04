@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rural.platform.mapper.WeatherMapper">
+    
+    <!-- 获取城市代码 -->
+    <select id="getCityCode" resultType="string">
+        SELECT code 
+        FROM cities 
+        WHERE name = #{cityName}
+    </select>
+
+    <!-- 获取当前天气数据 -->
+    <select id="getCurrentWeather" resultType="com.rural.platform.entity.WeatherData">
+        SELECT * 
+        FROM weather_data 
+        WHERE city_code = #{cityCode} 
+        ORDER BY created_at DESC 
+        LIMIT 1
+    </select>
+
+    <!-- 获取空气质量数据 -->
+    <select id="getAirQuality" resultType="com.rural.platform.entity.AirQuality">
+        SELECT * 
+        FROM air_quality 
+        WHERE city_code = #{cityCode} 
+        ORDER BY created_at DESC 
+        LIMIT 1
+    </select>
+
+    <!-- 获取天气预警信息 -->
+    <select id="getWeatherWarnings" resultType="com.rural.platform.entity.WeatherWarning">
+        SELECT * 
+        FROM weather_warnings 
+        WHERE city_code = #{cityCode} 
+        AND time >= DATE_SUB(NOW(), INTERVAL 24 HOUR) 
+        ORDER BY time DESC
+    </select>
+
+    <!-- 获取天气预报数据 -->
+    <select id="getWeatherForecasts" resultType="com.rural.platform.entity.WeatherForecast">
+        SELECT * 
+        FROM weather_forecast 
+        WHERE city_code = #{cityCode} 
+        AND forecast_date >= CURDATE() 
+        ORDER BY forecast_date 
+        LIMIT 7
+    </select>
+
+    <!-- 搜索城市 -->
+    <select id="searchCities" resultType="java.util.Map">
+        SELECT name as value 
+        FROM cities 
+        WHERE name LIKE CONCAT('%', #{query}, '%')
+    </select>
+</mapper> 
