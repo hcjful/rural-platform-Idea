@@ -1,60 +1,216 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="com.rural.platform.mapper.UserMapper">
-    <select id="selectById" resultType="com.rural.platform.entity.User">
-        SELECT * FROM users WHERE id = #{id}
-    </select>
+	<resultMap type="com.rural.platform.entity.User" id="userResult">
+        <id column="id" property="id" />
+		<result column="user_name" property="userName" />
+		<result column="user_code" property="userCode" />
+		<result column="user_pwd" property="userPwd" />
+		<result column="user_type" property="userType" />
+		<result column="user_state" property="userState" />
+		<result column="is_delete" property="isDelete" />
+		<result column="email" property="email"/>
+		<result column="phone" property="phone"/>
+        <result column="location" property="location"/>
+        <result column="avatar" property="avatar"/>
+        <result column="gender" property="gender"/>
+        <result column="real_name" property="realName"/>
+        <result column="bio" property="bio"/>
+        <result column="post_count" property="postCount"/>
+        <result column="follow_count" property="followCount"/>
+        <result column="fans_count" property="fansCount"/>
+        <result column="role" property="role"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
 
-    <select id="selectUserInfo" resultType="com.rural.platform.vo.UserVO">
-        SELECT 
-            id,
-            user_code as userCode,
-            user_name as userName,
-            real_name as realName,
-            email,
-            phone,
-            avatar,
-            role,
-            post_count as postCount,
-            follow_count as followCount,
-            fans_count as fansCount,
-            location,
-            bio
-        FROM users 
-        WHERE id = #{userId}
-    </select>
+    <resultMap id="userMap" type="com.rural.platform.entity.User">
+        <id property="id" column="id"/>
+        <result property="userName" column="user_name"/>
+        <result property="userCode" column="user_code"/>
+        <result property="userPwd" column="user_pwd"/>
+        <result property="phone" column="phone"/>
+        <result property="location" column="location"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <collection property="roles" ofType="com.rural.platform.entity.Role" javaType="java.util.ArrayList">
+            <id property="id" column="role_id"/>
+            <result property="name" column="role_name"/>
+            <result property="code" column="role_code"/>
+            <result property="description" column="role_description"/>
+        </collection>
+	</resultMap>
 
-    <update id="updateById">
-        UPDATE users
-        SET user_name = #{userName},
-            real_name = #{realName},
-            gender = #{gender},
-            phone = #{phone},
-            email = #{email},
-            location = #{location},
-            bio = #{bio},
-            update_time = NOW()
-        WHERE id = #{id}
-    </update>
+	<!--public User findUserByCode(String userCode)-->
+	<select id="findUserByCode" resultMap="userResult">
+		SELECT * FROM user
+		WHERE user_code = #{userCode} AND is_delete = '0'
+	</select>
 
-    <update id="updateAvatar">
-        UPDATE users
-        SET avatar = #{avatar},
-            update_time = NOW()
-        WHERE id = #{userId}
-    </update>
+	<select id="selectUserCount" resultType="integer">
+		select count(*) from user
+		<where>
+			<if test="userCode != null and userCode != ''">
+				and user_code like concat('%', #{userCode}, '%')
+			</if>
+			<if test="userType != null and userType != ''">
+				and user_type = #{userType}
+			</if>
+			<if test="userState != null and userState != ''">
+				and user_state = #{userState}
+			</if>
+			and is_delete = '0'
+		</where>
+	</select>
 
-    <update id="updatePhone">
-        UPDATE users
-        SET phone = #{phone},
-            update_time = NOW()
-        WHERE id = #{userId}
-    </update>
+	<select id="selectUserPage" resultMap="userResult">
+		select t1.*, t2.user_code creator_code 
+		from user t1 
+		left join user t2 on t1.create_by = t2.id
+		<where>
+			<if test="user.userCode != null and user.userCode != ''">
+				and t1.user_code like concat('%', #{user.userCode}, '%')
+			</if>
+			<if test="user.userType != null and user.userType != ''">
+				and t1.user_type = #{user.userType}
+			</if>
+			<if test="user.userState != null and user.userState != ''">
+				and t1.user_state = #{user.userState}
+			</if>
+			and t1.is_delete = '0'
+		</where>
+		limit #{page.limitIndex}, #{page.pageSize}
+	</select>
 
-    <update id="updateEmail">
-        UPDATE users
-        SET email = #{email},
-            update_time = NOW()
-        WHERE id = #{userId}
-    </update>
+	<select id="selectAll" resultMap="userResult">
+		select * from user where is_delete = '0'
+	</select>
+
+	<insert id="insert" parameterType="com.rural.platform.entity.User" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO user (
+			user_code, user_name, user_pwd, user_type, user_state, 
+            is_delete, email, phone, location, create_time, create_by, 
+			creator_code, created_at
+		) VALUES (
+			#{userCode}, #{userName}, #{userPwd}, #{userType}, #{userState},
+            #{isDelete}, #{email}, #{phone}, #{location}, #{createTime}, #{createBy}, 
+			#{creatorCode}, #{createdAt}
+		)
+	</insert>
+    
+	<select id="countByUserCode" resultType="int">
+		SELECT COUNT(*) FROM user WHERE user_code = #{userCode} AND is_delete = '0'
+	</select>
+    
+	<select id="countByEmail" resultType="int">
+		SELECT COUNT(*) FROM user WHERE email = #{email} AND is_delete = '0'
+	</select>
+    
+	<select id="countByPhone" resultType="int">
+		SELECT COUNT(*) FROM user WHERE phone = #{phone} AND is_delete = '0'
+	</select>
+
+	<update id="updatePwdById">
+		update user set user_pwd = #{userPwd} where id = #{userId}
+	</update>
+	
+	<select id="findById" resultMap="userMap">
+		SELECT u.*, r.id as role_id, r.name as role_name, r.code as role_code, r.description as role_description
+		FROM user u
+		LEFT JOIN user_role ur ON u.id = ur.user_id
+		LEFT JOIN role r ON ur.role_id = r.id
+		WHERE u.id = #{id}
+	</select>
+	
+	<select id="findByUsername" resultMap="userMap">
+		SELECT u.*, r.id as role_id, r.name as role_name, r.code as role_code, r.description as role_description
+		FROM user u
+		LEFT JOIN user_role ur ON u.id = ur.user_id
+		LEFT JOIN role r ON ur.role_id = r.id
+        WHERE u.user_code = #{username}
+	</select>
+	
+	<select id="findAll" resultMap="userMap">
+		SELECT u.*, r.id as role_id, r.name as role_name, r.code as role_code, r.description as role_description
+		FROM user u
+		LEFT JOIN user_role ur ON u.id = ur.user_id
+		LEFT JOIN role r ON ur.role_id = r.id
+		ORDER BY u.id
+	</select>
+	
+	<select id="findByRole" resultMap="userMap">
+		SELECT u.*, r.id as role_id, r.name as role_name, r.code as role_code, r.description as role_description
+		FROM user u
+		INNER JOIN user_role ur ON u.id = ur.user_id
+		INNER JOIN role r ON ur.role_id = r.id
+		WHERE r.code = #{roleCode}
+	</select>
+	
+	<update id="update" parameterType="com.rural.platform.entity.User">
+		UPDATE user
+		<set>
+			<if test="userName != null">user_name = #{userName},</if>
+			<if test="userPwd != null">user_pwd = #{userPwd},</if>
+			<if test="userType != null">user_type = #{userType},</if>
+			<if test="userState != null">user_state = #{userState},</if>
+			<if test="email != null">email = #{email},</if>
+			<if test="phone != null">phone = #{phone},</if>
+            <if test="location != null">location = #{location},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="realName != null">real_name = #{realName},</if>
+            <if test="bio != null">bio = #{bio},</if>
+			update_time = CURRENT_TIMESTAMP
+		</set>
+		WHERE id = #{id} AND is_delete = '0'
+	</update>
+	
+	<delete id="delete">
+		UPDATE user SET is_delete = '1' WHERE id = #{id}
+	</delete>
+	
+	<select id="countByUsername" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM user WHERE user_code = #{username}
+	</select>
+	
+	<select id="search" resultMap="userMap">
+		SELECT u.*, r.id as role_id, r.name as role_name, r.code as role_code, r.description as role_description
+		FROM user u
+		LEFT JOIN user_role ur ON u.id = ur.user_id
+		LEFT JOIN role r ON ur.role_id = r.id
+		<where>
+			<if test="username != null and username != ''">
+                AND u.user_code LIKE CONCAT('%', #{username}, '%')
+			</if>
+			<if test="phone != null and phone != ''">
+				AND u.phone LIKE CONCAT('%', #{phone}, '%')
+			</if>
+			<if test="roleCode != null and roleCode != ''">
+				AND r.code = #{roleCode}
+			</if>
+		</where>
+		ORDER BY u.id
+	</select>
+
+	<select id="selectById" resultMap="userResult">
+		SELECT * FROM user WHERE id = #{id} AND is_delete = '0'
+	</select>
+
+	<select id="selectUserInfo" resultMap="userResult">
+		SELECT * FROM user WHERE id = #{userId} AND is_delete = '0'
+	</select>
+
+	<update id="updateAvatar">
+		UPDATE user SET avatar = #{avatar} WHERE id = #{userId}
+	</update>
+
+	<update id="updatePhone">
+		UPDATE user SET phone = #{phone} WHERE id = #{userId}
+	</update>
+
+	<update id="updateEmail">
+		UPDATE user SET email = #{email} WHERE id = #{userId}
+	</update>
 </mapper>

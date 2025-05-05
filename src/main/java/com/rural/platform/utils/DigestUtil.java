@@ -1,84 +1,54 @@
 package com.rural.platform.utils;
 
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 
 /**
- * 加密工具类 -- 提供了MD5加密算法
+ * MD5 加密工具类
+ * 提供标准的 MD5 哈希计算，结果返回 32 位小写十六进制字符串。
  */
 public class DigestUtil {
 
-    // 定义默认的字符编码
-    private static String encodingCharset = "UTF-8";
+    private static final String MD5_ALGORITHM = "MD5";
+    private static final String CHARSET = "UTF-8";
+
+    // 私有构造方法，禁止实例化
+    private DigestUtil() {}
 
     /**
-     * 对参数数据进行MD5加密的算法
-     * @param aValue 待加密的数据
-     * @return 加密后的数据
+     * 计算字符串的 MD5 哈希值
+     * @param input 待加密的字符串
+     * @return 32 位小写 MD5 值，如 "e10adc3949ba59abbe56e057f20f883e"
+     * @throws RuntimeException 如果加密失败
      */
-    public static String hmacSign(String aValue) {
-        return hmacSign(aValue, "warehouse");
+    public static String md5(String input) {
+        try {
+            MessageDigest md = MessageDigest.getInstance(MD5_ALGORITHM);
+            byte[] digest = md.digest(input.getBytes(CHARSET));
+            return bytesToHex(digest);
+        } catch (Exception e) {
+            throw new RuntimeException("MD5 加密失败", e);
+        }
     }
 
     /**
-     * 使用密钥对参数数据进行MD5加密的算法
-     * @param aValue 待加密的数据
-     * @param aKey 加密密钥
-     * @return 加密后的数据
+     * 字节数组转十六进制字符串
      */
-    public static String hmacSign(String aValue, String aKey) {
-        byte k_ipad[] = new byte[64];
-        byte k_opad[] = new byte[64];
-        byte keyb[];
-        byte value[];
-        try {
-            keyb = aKey.getBytes(encodingCharset);
-            value = aValue.getBytes(encodingCharset);
-        } catch (UnsupportedEncodingException e) {
-            keyb = aKey.getBytes();
-            value = aValue.getBytes();
+    private static String bytesToHex(byte[] bytes) {
+        StringBuilder hex = new StringBuilder(bytes.length * 2);
+        for (byte b : bytes) {
+            hex.append(String.format("%02x", b));
         }
-
-        Arrays.fill(k_ipad, keyb.length, 64, (byte) 54);
-        Arrays.fill(k_opad, keyb.length, 64, (byte) 92);
-        for (int i = 0; i < keyb.length; i++) {
-            k_ipad[i] = (byte) (keyb[i] ^ 0x36);
-            k_opad[i] = (byte) (keyb[i] ^ 0x5c);
-        }
-
-        MessageDigest md = null;
-        try {
-            md = MessageDigest.getInstance("MD5");
-        } catch (NoSuchAlgorithmException e) {
-            return null;
-        }
-        md.update(k_ipad);
-        md.update(value);
-        byte dg[] = md.digest();
-        md.reset();
-        md.update(k_opad);
-        md.update(dg, 0, 16);
-        dg = md.digest();
-        return toHex(dg);
+        return hex.toString();
     }
 
-    /**
-     * 将字节数组转换为十六进制字符串
-     * @param input 字节数组
-     * @return 十六进制字符串
-     */
-    public static String toHex(byte input[]) {
-        if (input == null)
-            return null;
-        StringBuffer output = new StringBuffer(input.length * 2);
-        for (int i = 0; i < input.length; i++) {
-            int current = input[i] & 0xff;
-            if (current < 16)
-                output.append("0");
-            output.append(Integer.toString(current, 16));
-        }
-        return output.toString();
+    // 兼容旧版方法（可选）
+    @Deprecated
+    public static String hmacSign(String input) {
+        return md5(input);
+    }
+
+    @Deprecated
+    public static String hmacSign(String input, String key) {
+        return md5(input); // 忽略 key
     }
 }

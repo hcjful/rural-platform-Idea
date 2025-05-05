@@ -66,6 +66,11 @@ public class SecurityFilter implements Filter {
         prefixList.add("/warning/list");
         prefixList.add("/warning/status");  
         prefixList.add("/user");
+        prefixList.add("/multilevel");
+        prefixList.add("/products");
+        prefixList.add("/api");
+
+
 
 
 

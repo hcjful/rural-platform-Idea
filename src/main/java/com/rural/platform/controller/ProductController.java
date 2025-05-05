@@ -2,6 +2,7 @@ package com.rural.platform.controller;
 
 import com.rural.platform.entity.Product;
 import com.rural.platform.service.ProductService;
+import com.rural.platform.page.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +17,13 @@ public class ProductController {
     private ProductService productService;
     
     @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts() {
-        return ResponseEntity.ok(productService.getAllProducts());
+    public ResponseEntity<?> getAllProducts(
+            @RequestParam(defaultValue = "1") Integer pageNum,
+            @RequestParam(defaultValue = "12") Integer pageSize,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String search) {
+        Page page = productService.getAllProducts(pageNum, pageSize, category, search);
+        return ResponseEntity.ok(page);
     }
     
     @GetMapping("/{id}")

@@ -1,12 +1,13 @@
 package com.rural.platform.service;
 
 import com.rural.platform.entity.Product;
+import com.rural.platform.page.Page;
 
 import java.util.List;
 
 public interface ProductService {
     Product getProductById(Long id);
-    List<Product> getAllProducts();
+    Page getAllProducts(Integer pageNum, Integer pageSize, String category, String search);
     List<Product> getProductsByCategory(String category);
     List<Product> searchProducts(String keyword);
     Product createProduct(Product product);

@@ -76,11 +76,15 @@ public class UserServiceImpl implements UserService {
         // 判断验证码是否正确
         String code = CacheUtil.captchaMap.get("127.0.0.1");
         System.out.println("从缓存获取验证码: Code=" + code);
+        // 验证码为空或验证码不匹配
+        if (code == null) {
+            return Response.fail("501", "验证码已过期，请重新获取");
+        }
         if (!code.equalsIgnoreCase(userInfoVo.getVerificationCode())) {
             return Response.fail("501","验证码错误");
         }
         //判断账号是否存在
-        User user = userMapper.selectUserByCode(userInfoVo.getUserCode());
+        User user = userMapper.findUserByCode(userInfoVo.getUserCode());
         if (user==null){
             return Response.fail("501","账号不存在");
         }
@@ -91,6 +95,8 @@ public class UserServiceImpl implements UserService {
         if (!inputPwd.equals(userPwd)){
             return Response.fail("501","账号或者密码错误");
         }
+        // 验证通过后，清除验证码
+        CacheUtil.captchaMap.remove("127.0.0.1");
         //颁发令牌
         return Response.success("200","登录成功","aaa");
     }

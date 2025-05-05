@@ -15,6 +15,17 @@
         <result property="updatedAt" column="updated_at"/>
     </resultMap>
     
+    <sql id="whereClause">
+        <where>
+            <if test="category != null and category != ''">
+                AND category = #{category}
+            </if>
+            <if test="search != null and search != ''">
+                AND (name LIKE CONCAT('%', #{search}, '%') OR description LIKE CONCAT('%', #{search}, '%'))
+            </if>
+        </where>
+    </sql>
+    
     <select id="findById" resultMap="productMap">
         SELECT * FROM product WHERE id = #{id}
     </select>
@@ -29,6 +40,18 @@
     
     <select id="searchByKeyword" resultMap="productMap">
         SELECT * FROM product WHERE name LIKE CONCAT('%', #{keyword}, '%')
+    </select>
+    
+    <select id="findByPage" resultMap="productMap">
+        SELECT * FROM product
+        <include refid="whereClause"/>
+        ORDER BY id DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+    
+    <select id="countProducts" resultType="long">
+        SELECT COUNT(*) FROM product
+        <include refid="whereClause"/>
     </select>
     
     <insert id="insert" parameterType="com.rural.platform.entity.Product" useGeneratedKeys="true" keyProperty="id">

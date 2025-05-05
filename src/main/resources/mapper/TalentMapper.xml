@@ -15,22 +15,50 @@
         <result property="publishDate" column="publish_date"/>
     </resultMap>
 
-    <select id="selectTalentList" resultMap="TalentResult">
+    <sql id="selectTalentVo">
         SELECT 
             id, title, category, content,
             image_url, author_name, author_avatar,
             likes, is_liked, publish_date
         FROM talents
+    </sql>
+
+    <sql id="whereClause">
+        <where>
+            <if test="category != null and category != ''">
+                AND category = #{category}
+            </if>
+            <if test="search != null and search != ''">
+                AND (
+                    title LIKE CONCAT('%', #{search}, '%') OR
+                    content LIKE CONCAT('%', #{search}, '%') OR
+                    author_name LIKE CONCAT('%', #{search}, '%')
+                )
+            </if>
+        </where>
+    </sql>
+
+    <select id="selectTalentList" resultMap="TalentResult">
+        <include refid="selectTalentVo"/>
         ORDER BY publish_date DESC
     </select>
 
     <select id="selectTalentById" parameterType="Long" resultMap="TalentResult">
-        SELECT 
-            id, title, category, content,
-            image_url, author_name, author_avatar,
-            likes, is_liked, publish_date
-        FROM talents
+        <include refid="selectTalentVo"/>
         WHERE id = #{id}
+    </select>
+
+    <select id="countTalents" resultType="int">
+        SELECT COUNT(*)
+        FROM talents
+        <include refid="whereClause"/>
+    </select>
+
+    <select id="findByPage" resultMap="TalentResult">
+        <include refid="selectTalentVo"/>
+        <include refid="whereClause"/>
+        ORDER BY publish_date DESC
+        LIMIT #{offset}, #{pageSize}
     </select>
 
     <update id="updateTalent" parameterType="com.rural.platform.entity.Talent">

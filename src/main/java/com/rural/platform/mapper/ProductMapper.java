@@ -21,4 +21,18 @@ public interface ProductMapper {
     int updateStock(@Param("id") Long id, @Param("stock") Integer stock);
     
     int deleteById(Long id);
+
+    // 分页查询
+    List<Product> findByPage(
+        @Param("offset") int offset,
+        @Param("pageSize") int pageSize,
+        @Param("category") String category,
+        @Param("search") String search
+    );
+
+    // 统计总记录数
+    long countProducts(
+        @Param("category") String category,
+        @Param("search") String search
+    );
 } 

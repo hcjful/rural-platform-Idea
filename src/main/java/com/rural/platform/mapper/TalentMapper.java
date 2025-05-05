@@ -26,4 +26,25 @@ public interface TalentMapper {
      * @return 影响行数
      */
     int updateTalent(Talent talent);
+
+    /**
+     * 统计符合条件的记录总数
+     * @param category 分类
+     * @param search 搜索关键词
+     * @return 记录总数
+     */
+    int countTalents(@Param("category") String category, @Param("search") String search);
+
+    /**
+     * 分页查询才艺展示列表
+     * @param offset 偏移量
+     * @param pageSize 每页大小
+     * @param category 分类
+     * @param search 搜索关键词
+     * @return 才艺展示列表
+     */
+    List<Talent> findByPage(@Param("offset") Integer offset, 
+                           @Param("pageSize") Integer pageSize,
+                           @Param("category") String category,
+                           @Param("search") String search);
 } 

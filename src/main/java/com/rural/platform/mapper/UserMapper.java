@@ -11,7 +11,6 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
 	List<User> selectAll();
-	User selectUserByCode(String userCode);
 	//根据用户名查找用户的方法
 	User findUserByCode(@Param("userCode") String userCode);
 
