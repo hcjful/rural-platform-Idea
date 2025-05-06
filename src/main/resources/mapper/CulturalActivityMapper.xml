@@ -4,7 +4,7 @@
 
     <!-- 增加浏览次数 -->
     <update id="incrementViewCount">
-        UPDATE cultural_activities
+        UPDATE cultural_activity
         SET view_count = view_count + 1
         WHERE id = #{id}
     </update>
@@ -20,17 +20,17 @@
             a.location,
             a.status,
             a.participant_count as participantCount,
-            a.created_at as createdAt
-        FROM cultural_activities a
+            a.create_time as createTime
+        FROM cultural_activity a
         WHERE a.user_id = #{userId}
-        ORDER BY a.created_at DESC
+        ORDER BY a.create_time DESC
         LIMIT #{offset}, #{pageSize}
     </select>
     
     <!-- 统计用户发布的文化活动数量 -->
     <select id="countPublishedByUserId" resultType="int">
         SELECT COUNT(*)
-        FROM cultural_activities
+        FROM cultural_activity
         WHERE user_id = #{userId}
     </select>
     
@@ -45,9 +45,9 @@
             a.location,
             a.status,
             a.participant_count as participantCount,
-            a.created_at as createdAt,
+            a.create_time as createTime,
             u.user_name as publisherName
-        FROM cultural_activities a
+        FROM cultural_activity a
         INNER JOIN cultural_participants p ON a.id = p.activity_id
         INNER JOIN users u ON a.user_id = u.id
         WHERE p.user_id = #{userId}
@@ -58,7 +58,7 @@
     <!-- 统计用户参与的文化活动数量 -->
     <select id="countParticipatedByUserId" resultType="int">
         SELECT COUNT(*)
-        FROM cultural_activities a
+        FROM cultural_activity a
         INNER JOIN cultural_participants p ON a.id = p.activity_id
         WHERE p.user_id = #{userId}
     </select>

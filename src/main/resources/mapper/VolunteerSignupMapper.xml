@@ -5,7 +5,7 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.rural.platform.entity.VolunteerSignup">
         <id column="id" property="id"/>
-        <result column="activity_id" property="activity.id"/>
+        <result column="activity_id" property="activityId"/>
         <result column="name" property="name"/>
         <result column="phone" property="phone"/>
         <result column="id_card" property="idCard"/>
@@ -22,19 +22,12 @@
 
     <!-- 根据活动ID查询报名信息 -->
     <select id="findByActivityId" resultMap="BaseResultMap">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM volunteer_signups
-        WHERE activity_id = #{activityId}
-        ORDER BY created_at DESC
+        SELECT * FROM volunteer_signups WHERE activity_id = #{activityId}
     </select>
 
     <!-- 根据活动ID和状态统计报名人数 -->
     <select id="countByActivityIdAndStatus" resultType="int">
-        SELECT COUNT(*)
-        FROM volunteer_signups
-        WHERE activity_id = #{activityId}
-        AND status = #{status}
+        SELECT COUNT(*) FROM volunteer_signups WHERE activity_id = #{activityId} AND status = #{status}
     </select>
 
 </mapper> 

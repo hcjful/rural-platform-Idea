@@ -5,6 +5,7 @@ import com.rural.platform.page.Page;
 import com.rural.platform.vo.UserVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -63,4 +64,7 @@ public interface UserMapper {
     int updateAvatar(@Param("userId") Long userId, @Param("avatar") String avatar);
     int updatePhone(@Param("userId") Long userId, @Param("phone") String phone);
     int updateEmail(@Param("userId") Long userId, @Param("email") String email);
+
+    @Select("SELECT * FROM user WHERE user_code = #{userCode}")
+    User selectByUserCode(String userCode);
 }

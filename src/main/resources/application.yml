@@ -2,16 +2,38 @@ mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true  # 开启字段下划线映射
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  # 开启SQL日志
+    cache-enabled: false
+    local-cache-scope: statement
+    lazy-loading-enabled: false
+    aggressive-lazy-loading: false
+    multiple-result-sets-enabled: false
   global-config:
     db-config:
       table-underline: true             # 表名下划线格式
-      # 如果有表前缀可配置
-      # table-prefix: t_
-  mapper-locations: classpath*:mappers/*.xml  # 指定mapper XML文件位置
+  mapper-locations: 
+    - classpath:mapper/*.xml  # 修改这里，移除classpath*前缀
   type-aliases-package: com.rural.platform.entity  # 指定实体类包路径
+  check-config-location: true
+  configuration-properties:
+    blobType: BLOB
+    boolValue: TRUE
 
 weather:
   api:
     key: 68db13a6d081478eb6615c91a3074c0e  # 替换为你的和风天气 API key
     version: "7"
     base-url: "https://api.qweather.com"
+
+jwt:
+  secret: your-256-bit-secret-key-here
+  expiration: 86400000 # 24 hours in milliseconds
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/CampusProject?useSSL=false&serverTimezone=UTC
+    username: root
+    password: 20021111
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+server:
+  port: 9999

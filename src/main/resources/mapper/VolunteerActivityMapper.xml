@@ -58,11 +58,12 @@
             a.id,
             a.title,
             a.description,
-            a.start_time as startTime,
-            a.end_time as endTime,
+            a.start_date as startDate,
+            a.end_date as endDate,
             a.location,
             a.status,
-            a.participant_count as participantCount,
+            a.max_volunteers as maxVolunteers,
+            a.current_volunteers as currentVolunteers,
             a.created_at as createdAt
         FROM volunteer_activities a
         WHERE a.user_id = #{userId}
@@ -83,18 +84,19 @@
             a.id,
             a.title,
             a.description,
-            a.start_time as startTime,
-            a.end_time as endTime,
+            a.start_date as startDate,
+            a.end_date as endDate,
             a.location,
             a.status,
-            a.participant_count as participantCount,
+            a.max_volunteers as maxVolunteers,
+            a.current_volunteers as currentVolunteers,
             a.created_at as createdAt,
             u.user_name as publisherName
         FROM volunteer_activities a
         INNER JOIN volunteer_participants p ON a.id = p.activity_id
         INNER JOIN users u ON a.user_id = u.id
         WHERE p.user_id = #{userId}
-        ORDER BY a.start_time DESC
+        ORDER BY a.start_date DESC
         LIMIT #{offset}, #{pageSize}
     </select>
     

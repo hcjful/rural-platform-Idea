@@ -100,4 +100,20 @@ public class UserServiceImpl implements UserService {
         //颁发令牌
         return Response.success("200","登录成功","aaa");
     }
+
+    @Override
+    public User getUserByCode(String userCode) {
+        return userMapper.selectByUserCode(userCode);
+    }
+
+    @Override
+    public User getUserById(Long id) {
+        return userMapper.selectById(id);
+    }
+
+    @Override
+    public User updateUser(User user) {
+        userMapper.updateById(user);
+        return user;
+    }
 }

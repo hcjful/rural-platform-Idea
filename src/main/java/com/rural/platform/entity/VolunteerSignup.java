@@ -1,5 +1,6 @@
 package com.rural.platform.entity;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -9,15 +10,18 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
+@TableName("volunteer_signups")
 @Table(name = "volunteer_signups")
 public class VolunteerSignup {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "activity_id", nullable = false)
-    private VolunteerActivity activity;
+    @Column(name = "activity_id", nullable = false)
+    private Long activityId;
+
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 
     @Column(nullable = false)
     private String name;
@@ -34,8 +38,11 @@ public class VolunteerSignup {
     @Column(nullable = false)
     private String status = "pending"; // pending, approved, rejected
 
+    @Column(name = "signup_time")
+    private LocalDateTime signupTime;
+
     @CreationTimestamp
-    @Column(name = "created_at", updatable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @UpdateTimestamp

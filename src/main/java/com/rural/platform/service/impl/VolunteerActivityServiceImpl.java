@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +35,20 @@ public class VolunteerActivityServiceImpl extends ServiceImpl<VolunteerActivityM
                         .like(VolunteerActivity::getDescription, search))
                 .orderByDesc(VolunteerActivity::getCreatedAt));
 
+        // 处理结果，确保数值正确
+        result.getRecords().forEach(activity -> {
+            // 如果最大人数为空或者为0，设置默认值
+            if (activity.getMaxVolunteers() == null || activity.getMaxVolunteers() <= 0) {
+                activity.setMaxVolunteers(20);
+            }
+            // 如果当前人数为空，设置为0
+            if (activity.getCurrentVolunteers() == null) {
+                activity.setCurrentVolunteers(0);
+            }
+            // 更新到数据库
+            activityMapper.updateById(activity);
+        });
+
         // 转换回 Spring Data 的 Page
         return new PageImpl<>(result.getRecords(), pageable, result.getTotal());
     }
@@ -46,6 +61,10 @@ public class VolunteerActivityServiceImpl extends ServiceImpl<VolunteerActivityM
     @Override
     @Transactional
     public VolunteerActivity createActivity(VolunteerActivity activity) {
+        // 设置默认值
+        if (activity.getMaxVolunteers() == null || activity.getMaxVolunteers() <= 0) {
+            activity.setMaxVolunteers(20); // 设置默认最大志愿者数量为20
+        }
         activity.setCurrentVolunteers(0);
         activity.setStatus("recruiting");
         activityMapper.insert(activity);
@@ -61,15 +80,25 @@ public class VolunteerActivityServiceImpl extends ServiceImpl<VolunteerActivityM
             throw new RuntimeException("报名人数已满");
         }
         
-        if (!"recruiting".equals(activity.getStatus())) {
+        // 允许 pending 和 recruiting 状态报名
+        if (!"recruiting".equals(activity.getStatus()) && !"pending".equals(activity.getStatus())) {
             throw new RuntimeException("活动不在报名阶段");
         }
 
-        signup.setActivity(activity);
+        // 设置活动ID而不是整个活动对象
+        signup.setActivityId(activityId);
         signup.setStatus("pending");
+        signup.setSignupTime(LocalDateTime.now());
+        // TODO: 从当前登录用户中获取用户ID
+        signup.setUserId(1L); // 这里需要替换为实际的用户ID
         signupMapper.insert(signup);
 
+        // 更新活动的当前报名人数
         activity.setCurrentVolunteers(activity.getCurrentVolunteers() + 1);
+        // 如果是 pending 状态，更新为 recruiting
+        if ("pending".equals(activity.getStatus())) {
+            activity.setStatus("recruiting");
+        }
         activityMapper.updateById(activity);
 
         return signup;

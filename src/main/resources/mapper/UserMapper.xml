@@ -13,17 +13,13 @@
 		<result column="is_delete" property="isDelete" />
 		<result column="email" property="email"/>
 		<result column="phone" property="phone"/>
-        <result column="location" property="location"/>
-        <result column="avatar" property="avatar"/>
-        <result column="gender" property="gender"/>
-        <result column="real_name" property="realName"/>
-        <result column="bio" property="bio"/>
-        <result column="post_count" property="postCount"/>
-        <result column="follow_count" property="followCount"/>
-        <result column="fans_count" property="fansCount"/>
-        <result column="role" property="role"/>
+        <result column="address" property="address"/>
+        <result column="create_by" property="createBy"/>
         <result column="create_time" property="createTime"/>
+        <result column="update_by" property="updateBy"/>
         <result column="update_time" property="updateTime"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="creator_code" property="creatorCode"/>
     </resultMap>
 
     <resultMap id="userMap" type="com.rural.platform.entity.User">
@@ -31,10 +27,18 @@
         <result property="userName" column="user_name"/>
         <result property="userCode" column="user_code"/>
         <result property="userPwd" column="user_pwd"/>
+        <result property="userType" column="user_type"/>
+        <result property="userState" column="user_state"/>
+        <result property="isDelete" column="is_delete"/>
+        <result property="email" column="email"/>
         <result property="phone" column="phone"/>
-        <result property="location" column="location"/>
+        <result property="address" column="address"/>
+        <result property="createBy" column="create_by"/>
         <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="creatorCode" column="creator_code"/>
         <collection property="roles" ofType="com.rural.platform.entity.Role" javaType="java.util.ArrayList">
             <id property="id" column="role_id"/>
             <result property="name" column="role_name"/>
@@ -91,12 +95,12 @@
 	<insert id="insert" parameterType="com.rural.platform.entity.User" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO user (
 			user_code, user_name, user_pwd, user_type, user_state, 
-            is_delete, email, phone, location, create_time, create_by, 
-			creator_code, created_at
+            is_delete, email, phone, address, create_by, create_time,
+            update_by, update_time, created_at, creator_code
 		) VALUES (
 			#{userCode}, #{userName}, #{userPwd}, #{userType}, #{userState},
-            #{isDelete}, #{email}, #{phone}, #{location}, #{createTime}, #{createBy}, 
-			#{creatorCode}, #{createdAt}
+            #{isDelete}, #{email}, #{phone}, #{address}, #{createBy}, #{createTime},
+            #{updateBy}, #{updateTime}, #{createdAt}, #{creatorCode}
 		)
 	</insert>
     
@@ -157,11 +161,8 @@
 			<if test="userState != null">user_state = #{userState},</if>
 			<if test="email != null">email = #{email},</if>
 			<if test="phone != null">phone = #{phone},</if>
-            <if test="location != null">location = #{location},</if>
-            <if test="avatar != null">avatar = #{avatar},</if>
-            <if test="gender != null">gender = #{gender},</if>
-            <if test="realName != null">real_name = #{realName},</if>
-            <if test="bio != null">bio = #{bio},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
 			update_time = CURRENT_TIMESTAMP
 		</set>
 		WHERE id = #{id} AND is_delete = '0'

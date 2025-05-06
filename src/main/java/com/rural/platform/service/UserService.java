@@ -15,6 +15,9 @@ public interface UserService {
     boolean checkUserExists(String userCode);
     boolean checkEmailExists(String email);
     boolean checkPhoneExists(String phone);
+    User getUserByCode(String userCode);
+    User getUserById(Long id);
+    User updateUser(User user);
 //	//根据用户名查找用户的业务方法
 //	public User findUserByCode(String userCode);
 //

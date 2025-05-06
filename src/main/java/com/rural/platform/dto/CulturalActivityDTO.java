@@ -22,9 +22,28 @@ public class CulturalActivityDTO {
     @NotBlank(message = "活动内容不能为空")
     private String content;
     
+    @NotBlank(message = "活动地点不能为空")
+    private String location;
+    
+    private String startTime;
+    
+    private String endTime;
+    
     private String author;
     
     private String createTime;
     
     private Integer viewCount;
+    
+    private String organizer;
+    
+    private String contact;
+    
+    private String phone;
+    
+    private Integer maxParticipants;
+    
+    private Integer currentParticipants;
+    
+    private Integer status;
 } 

@@ -3,6 +3,7 @@ package com.rural.platform.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.TableField;
 
 import java.time.LocalDateTime;
 
@@ -14,19 +15,37 @@ public class CulturalActivity {
     private String description;
     private String content;
     private String location;
+    
+    @TableField("start_time")
     private LocalDateTime startTime;
+    
+    @TableField("end_time")
     private LocalDateTime endTime;
+    
     private String organizer;
     private String contact;
     private String phone;
+    
+    @TableField("max_participants")
     private Integer maxParticipants;
+    
+    @TableField("current_participants")
     private Integer currentParticipants;
+    
+    @TableField("image_url")
     private String imageUrl;
+    
     private Integer status;
     private String category;
     private String author;
+    
+    @TableField("view_count")
     private Integer viewCount;
+    
+    @TableField("create_time")
     private LocalDateTime createTime;
+    
+    @TableField("update_time")
     private LocalDateTime updateTime;
 
     public Long getId() {
